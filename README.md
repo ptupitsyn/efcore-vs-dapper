@@ -1,5 +1,7 @@
 # EF Core vs Dapper
-Simple benchmark results:
+
+Benchmarks for blog post discussion: https://exceptionnotfound.net/dapper-vs-entity-framework-core-query-performance-benchmarking-2019/
+
 
 * `BenchmarkDotNet=v0.12.0, OS=Windows 10.0.18362`
 * `Intel Core i7-9700K CPU 3.60GHz (Coffee Lake), 1 CPU, 8 logical and 8 physical cores`
