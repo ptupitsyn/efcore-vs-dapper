@@ -12,6 +12,9 @@ namespace efcore_vs_dapper
         private static readonly Func<BenchContext, Person> CompiledPersonQuery = 
             EF.CompileQuery((BenchContext ctx) => ctx.Persons.Single(p => p.Id == 1));
 
+        private static readonly Func<BenchContext, string> CompiledNameQuery = 
+            EF.CompileQuery((BenchContext ctx) => ctx.Persons.Where(p => p.Id == 1).Select(p => p.Name).Single());
+
         private readonly BenchContext _context;
 
         public EfCoreVsDapperBench()
@@ -49,6 +52,13 @@ namespace efcore_vs_dapper
         public void SelectFieldByIdEf()
         {
             var name = _context.Persons.Where(p => p.Id == 2).Select(p => p.Name).Single();
+            VerifyName(name);
+        }
+        
+        [Benchmark]
+        public void SelectFieldByIdEfCompiled()
+        {
+            var name = CompiledNameQuery(_context);
             VerifyName(name);
         }
         
