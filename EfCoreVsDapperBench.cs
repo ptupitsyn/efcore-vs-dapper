@@ -17,20 +17,14 @@ namespace efcore_vs_dapper
         {
             var ctx = new BenchContext();
             var person = ctx.Persons.Single(p => p.Id == 1);
-            if (person.Id != 1)
-            {
-                throw new Exception();
-            }
+            VerifyPerson(person);
         }
-        
+
         [Benchmark]
         public void SelectEntityByIdEfCompiled()
         {
             var person = CompiledPersonQuery(new BenchContext());
-            if (person.Id != 1)
-            {
-                throw new Exception();
-            }
+            VerifyPerson(person);
         }
         
         [Benchmark]
@@ -38,11 +32,17 @@ namespace efcore_vs_dapper
         {
             var person = BenchContext.Connection.QuerySingle<Person>(
                 "SELECT * FROM Persons WHERE ID = @id", new {id = 1});
+            VerifyPerson(person);
+        }
+        
+        private static void VerifyPerson(Person person)
+        {
             if (person.Id != 1)
             {
-                throw new Exception();
+                throw new Exception(person.Name);
             }
         }
+
         
 //        [Benchmark]
 //        public void SelectFieldByIdEf()
