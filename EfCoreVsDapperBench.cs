@@ -45,6 +45,21 @@ namespace efcore_vs_dapper
             VerifyPerson(person);
         }
         
+        [Benchmark]
+        public void SelectFieldByIdEf()
+        {
+            var name = _context.Persons.Where(p => p.Id == 2).Select(p => p.Name).Single();
+            VerifyName(name);
+        }
+        
+        [Benchmark]
+        public void SelectFieldByIdDapper()
+        {
+            var name = BenchContext.Connection.QuerySingle<string>(
+                "SELECT name FROM Persons WHERE ID = @id", new {id = 2});
+            VerifyName(name);
+        }
+        
         private static void VerifyPerson(Person person)
         {
             if (person.Id != 1)
@@ -52,18 +67,13 @@ namespace efcore_vs_dapper
                 throw new Exception(person.Name);
             }
         }
-
         
-//        [Benchmark]
-//        public void SelectFieldByIdEf()
-//        {
-//            
-//        }
-//        
-//        [Benchmark]
-//        public void SelectFieldByIdDapper()
-//        {
-//            
-//        }
+        private static void VerifyName(string name)
+        {
+            if (name != "Peter")
+            {
+                throw new Exception(name);
+            }
+        }
     }
 }
