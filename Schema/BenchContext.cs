@@ -5,7 +5,7 @@ namespace efcore_vs_dapper.Schema
 {
     public class BenchContext : DbContext
     {
-        private static readonly SqliteConnection Connection = GetInMemoryOpenSqliteConnection(); 
+        public static readonly SqliteConnection Connection = GetInMemoryOpenSqliteConnection(); 
         
         public BenchContext() : base(GetOptions())
         {
