@@ -11,19 +11,29 @@ namespace efcore_vs_dapper
     {
         private static readonly Func<BenchContext, Person> CompiledPersonQuery = 
             EF.CompileQuery((BenchContext ctx) => ctx.Persons.Single(p => p.Id == 1));
-        
+
+        private readonly BenchContext _context;
+
+        public EfCoreVsDapperBench()
+        {
+            _context = new BenchContext();
+            _context.Database.EnsureCreated();
+            _context.Persons.Add(new Person(1, "Ivan"));
+            _context.Persons.Add(new Person(2, "Peter"));
+            _context.SaveChanges();
+        }
+
         [Benchmark]
         public void SelectEntityByIdEf()
         {
-            var ctx = new BenchContext();
-            var person = ctx.Persons.Single(p => p.Id == 1);
+            var person = _context.Persons.Single(p => p.Id == 1);
             VerifyPerson(person);
         }
 
         [Benchmark]
         public void SelectEntityByIdEfCompiled()
         {
-            var person = CompiledPersonQuery(new BenchContext());
+            var person = CompiledPersonQuery(_context);
             VerifyPerson(person);
         }
         
