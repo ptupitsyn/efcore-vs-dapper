@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BenchmarkDotNet.Running;
 
 namespace efcore_vs_dapper
 {
@@ -6,7 +6,7 @@ namespace efcore_vs_dapper
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BenchmarkRunner.Run<EfCoreVsDapperBench>();
         }
     }
 }
